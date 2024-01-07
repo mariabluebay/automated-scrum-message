@@ -4,16 +4,16 @@
 
     <div class="row justify-content-center mt-5">
         <div class="col-md-8">
+            @if ($message = Session::get('errors'))
+                <div class="alert alert-danger">
+                    {{ $message }}
+                </div>
+            @endif
             <div class="card">
                 <div class="card-header">Messages</div>
                 <div id="app">
                 </div>
                 <div class="card-body">
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success">
-                            {{ $message }}
-                        </div>
-                    @endif
                     <div class="">
                         <form action="{{ route('notify') }}" method="post">
                             @csrf

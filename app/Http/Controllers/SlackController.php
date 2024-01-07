@@ -33,7 +33,9 @@ class SlackController extends Controller
             $data['icon_emojii'] = ':ghost:';
 
             $formData = json_encode($data);
-
+//display error
+//            return redirect()->route('welcome')
+//                ->withErrors(new Exception('error'));
 
             $client->request(
                 "POST",
@@ -41,14 +43,13 @@ class SlackController extends Controller
                 ['body' => $formData],
             );
 
-            return redirect()->route('dashboard')
-                ->withSuccess('Message sent: ' . $request->text);
+            return redirect()->route('welcome');
 
         } catch (Exception $e) {
-            return redirect()->route('dashboard')
+            return redirect()->route('welcome')
                 ->withErrors($e->getMessage());
         } catch (GuzzleException $e) {
-            return redirect()->route('dashboard')
+            return redirect()->route('welcome')
                 ->withErrors($e->getMessage());
         }
 
