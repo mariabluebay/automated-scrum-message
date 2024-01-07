@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
@@ -45,7 +47,28 @@ class SlackController extends Controller
         } catch (Exception $e) {
             return redirect()->route('dashboard')
                 ->withErrors($e->getMessage());
+        } catch (GuzzleException $e) {
+            return redirect()->route('dashboard')
+                ->withErrors($e->getMessage());
         }
+
+    }
+
+    /**
+     * @return mixed
+     */
+    public function viewMessages(): mixed
+    {
+
+        $client = new Client();
+        $headers = [
+            'Authorization' => 'Bearer xoxb-5007610574999-5045913626272-QyBhuj1O06PtM7yqj7CkE13B'
+        ];
+
+        $request = new GuzzleRequest('GET', 'https://slack.com/api/conversations.history?channel=C050N0KL0NP', $headers);
+        $response = $client->sendAsync($request)->wait();
+
+        return $response->getBody();
 
     }
 
