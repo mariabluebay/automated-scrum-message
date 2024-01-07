@@ -15,7 +15,7 @@ use App\Http\Controllers\SlackController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('app');
 });
 
 Route::controller(LoginRegisterController::class)->group(function () {
