@@ -63,7 +63,7 @@ class SlackController extends Controller
 
         $client = new Client();
         $headers = [
-            'Authorization' => 'Bearer xoxb-5007610574999-5045913626272-QyBhuj1O06PtM7yqj7CkE13B'
+            'Authorization' => 'Bearer '.config('slack.bot-token')
         ];
 
         $request = new GuzzleRequest('GET', 'https://slack.com/api/conversations.history?channel=C050N0KL0NP', $headers);
