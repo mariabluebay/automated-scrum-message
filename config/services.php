@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'slack' => [
+        'bot-token' => env('SLACK_BOT_TOKEN'),
+        'channel'   => env('SLACK_CHANNEL'),
+        'webhook-url' => env('SLACK_WEBHOOK_URL'),
+    ]
+
 ];

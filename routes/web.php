@@ -15,8 +15,8 @@ use App\Http\Controllers\SlackController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('app');
+})->name('welcome');
 
 Route::controller(LoginRegisterController::class)->group(function () {
     Route::get('/register', 'register')->name('register');
@@ -30,4 +30,5 @@ Route::controller(LoginRegisterController::class)->group(function () {
 
 Route::controller(SlackController::class)->group(function () {
     Route::post('/notify', 'notify')->name('notify');
+    Route::get('/messages', 'viewMessages')->name('messages');
 });
