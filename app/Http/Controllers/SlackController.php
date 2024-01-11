@@ -29,8 +29,7 @@ class SlackController extends Controller
 
             $data['channel'] = 'api';
             $data['text'] = $request->text;
-            $data['username'] = 'SCRUMAPI';
-            $data['icon_emojii'] = ':ghost:';
+            $data['username'] = 'SCRUM_API';
 
             $formData = json_encode($data);
 //display error
@@ -63,10 +62,10 @@ class SlackController extends Controller
 
         $client = new Client();
         $headers = [
-            'Authorization' => 'Bearer '.config('slack.bot-token')
+            'Authorization' => 'Bearer '.config('services.slack.bot-token')
         ];
 
-        $request = new GuzzleRequest('GET', 'https://slack.com/api/conversations.history?channel=C050N0KL0NP', $headers);
+        $request = new GuzzleRequest('GET', 'https://slack.com/api/conversations.history?channel='.config('services.slack.channel'), $headers);
         $response = $client->sendAsync($request)->wait();
 
         return $response->getBody();
