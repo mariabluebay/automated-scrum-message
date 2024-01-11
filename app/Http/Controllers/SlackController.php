@@ -39,7 +39,7 @@ class SlackController extends Controller
 
             $client->request(
                 "POST",
-                'https://hooks.slack.com/services/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',
+                config('services.slack.webhook-url'),
                 ['body' => $formData],
             );
 
