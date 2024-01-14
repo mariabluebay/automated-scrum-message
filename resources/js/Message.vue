@@ -1,35 +1,49 @@
 <template>
     <textarea
-        v-text="modelValue"
+        v-text="modelValue.text"
         @keydown.enter.prevent="sendMessage"
         class="form-control" id="textMessage"
         name="textMessage" ></textarea>
 </template>
 
 <script setup>
-
     const props = defineProps({
-        modelValue: String
+        modelValue: Object
     });
     let emitUpdate = defineEmits(['update:modelValue']);
 
-
      function sendMessage(e) {
-       emitUpdate('update:modelValue', e.target.value);
+       emitUpdate(
+           'update:modelValue',
+           {
+               "action": props.modelValue.action,
+               "text": e.target.value,
+               "ts":  props.modelValue.ts,
+           }
+       );
 
        setTimeout(async () => {
-           // POST request using fetch with async/await
            const token = window.document.body.querySelector('meta[name="csrf-token"]').content;
+
+           let data = {
+               "text": props.modelValue.text,
+               "ts": props.modelValue.ts,
+               "action": props.modelValue.action
+           }
+
+           let uri = data.action !== "new" ? 'modify' : 'notify'
+
            const requestOptions = {
                method: "POST",
                headers: {
                    "Content-Type": "application/json",
                    "X-CSRF-ToKEN": token
                },
-               body: JSON.stringify({text: props.modelValue})
+               body: JSON.stringify(data)
            };
 
-           await fetch('/notify', requestOptions).then(response => response.json())
+
+           await fetch(uri, requestOptions).then(response => response.json())
                .then(data => {
                    console.log(data)
                })

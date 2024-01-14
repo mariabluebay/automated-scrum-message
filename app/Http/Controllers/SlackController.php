@@ -57,11 +57,45 @@ class SlackController extends Controller
             'Authorization' => 'Bearer '.config('services.slack.bot-token')
         ];
 
-        $request = new GuzzleRequest('GET', 'https://slack.com/api/conversations.history?channel='.config('services.slack.channel'), $headers);
+        $request = new GuzzleRequest('GET', 'https://slack.com/api/conversations.history?channel='.config('services.slack.channel-id'), $headers);
+
         $response = $client->sendAsync($request)->wait();
 
         return $response->getBody();
 
+    }
+
+    /**
+     * @return mixed
+     */
+    public function modify(Request $request): mixed
+    {
+        $request->validate([
+            'text' => 'required|string',
+            'action' => 'required|string',
+        ]);
+
+        $client = new Client();
+        $data['channel'] = config('services.slack.channel-id');
+        $data['text'] = $request->text;
+        $data['ts'] = $request->ts;
+        $headers = [
+            "Content-Type" => "application/json; charset=utf-8",
+            'Authorization' => 'Bearer '.config('services.slack.bot-token')
+        ];
+        $action = $request->action === 'edit' ? 'chat.update' : 'chat.delete';
+
+
+        $request = new GuzzleRequest(
+            'POST',
+            config('services.slack.api-url') . $action,
+            $headers,
+            json_encode($data)
+        );
+
+        $response = $client->sendAsync($request)->wait();
+
+        return $response->getBody();
     }
 
 }

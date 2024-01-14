@@ -19,16 +19,17 @@ Route::get('/', function () {
 })->name('welcome');
 
 Route::controller(LoginRegisterController::class)->group(function () {
-    Route::get('/register', 'register')->name('register');
-    Route::post('/store', 'store')->name('store');
-    Route::get('/login', 'login')->name('login');
-    Route::post('/authenticate', 'authenticate')->name('authenticate');
     Route::get('/dashboard', 'dashboard')->name('dashboard');
+    Route::get('/login', 'login')->name('login');
+    Route::get('/register', 'register')->name('register');
+    Route::post('/authenticate', 'authenticate')->name('authenticate');
     Route::post('/logout', 'logout')->name('logout');
-
+    Route::post('/store', 'store')->name('store');
 });
 
 Route::controller(SlackController::class)->group(function () {
-    Route::post('/notify', 'notify')->name('notify');
     Route::get('/messages', 'viewMessages')->name('messages');
+    Route::post('/modify', 'modify')->name('modify');
+    Route::post('/notify', 'notify')->name('notify');
+
 });

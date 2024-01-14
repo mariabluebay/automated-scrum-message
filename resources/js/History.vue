@@ -2,12 +2,12 @@
     <div class="card">
         <div class="card-header">Messages</div>
         <div
-            v-if="post && post !== 'Loading' "
+            v-if="history"
             class="card-body"
         >
             <div
-                v-for="message in post"
-                :key="post.ts"
+                v-for="message in history"
+                :key="history.ts"
                 class="row justify-content-center m-2"
             >
                 <p
@@ -27,12 +27,12 @@
                 <p class="card-text">{{ message ? message.text : 'Loading...'}}</p>
                 <div class="d-flex flex-row-reverse">
                     <button
-                        @click="edit(message)"
+                        @click="action(message, 'delete')"
                         type="button"
                         class="btn btn-danger btn-sm m-1"
                     >Delete</button>
                     <button
-                        @click="edit(message)"
+                        @click="action(message, 'edit')"
                         type="button"
                         class="btn btn-primary btn-sm m-1"
                     >Edit</button>
@@ -46,10 +46,10 @@
 
 <script setup>
 import { ref } from 'vue';
-let post = ref('Loading...');
+let history = ref('Loading...');
 
 defineProps({
-    modelValue: String
+    modelValue: Object
 });
 
 let emitUpdate = defineEmits(['update:modelValue']);
@@ -57,7 +57,7 @@ let emitUpdate = defineEmits(['update:modelValue']);
 setTimeout(async () => {
     const res = await fetch(`/messages`).then((r) => r.json());
     // filter by user
-    post.value = res.messages.filter(function (m) {
+    history.value = res.messages.filter(function (m) {
         //console.log(m);
         if(m.hasOwnProperty('username')) {
             return m.username === 'SCRUM_API';
@@ -67,7 +67,7 @@ setTimeout(async () => {
 
     });
 
-    post.value = res.messages;
+    history.value = res.messages;
 
 }, 2000);
 
@@ -75,8 +75,14 @@ function convertUnixToDate(ts) {
     return new Date(ts * 1000).toLocaleString();
 }
 
-function edit(message) {
-    emitUpdate('update:modelValue', message.text);
+function action(message, action) {
+    emitUpdate(
+        'update:modelValue',
+        {
+            'action': action,
+            'text' : message.text,
+            'ts': message.ts
+        });
 }
 </script>
 

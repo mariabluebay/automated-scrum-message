@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-sm">
 
-                <History v-model="textMessage"/>
+                <History v-model="message"/>
             </div>
             <div class="col-sm">
 
@@ -12,7 +12,7 @@
                     <div class="card-body">
                         <div class="">
                             <Message
-                                v-model="textMessage"
+                                v-model="message"
                                 style="width: 100%; min-height: 300px"
                             />
                         </div>
@@ -28,8 +28,11 @@
     import History from "./History.vue"
     import Message from "./Message.vue";
 
-    let post = ref('Loading...');
-    let textMessage = ref('Message #api.');
+    let message = ref({
+        'action': 'new',
+        'text': 'Message #api.',
+        'ts': null
+    });
 
 </script>
 
