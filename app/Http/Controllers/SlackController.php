@@ -26,24 +26,17 @@ class SlackController extends Controller
         try
         {
             $client = new Client();
-
             $data['channel'] = 'api';
             $data['text'] = $request->text;
             $data['username'] = 'SCRUM_API';
 
-            $formData = json_encode($data);
-//display error
-//            return redirect()->route('welcome')
-//                ->withErrors(new Exception('error'));
-
             $client->request(
                 "POST",
                 config('services.slack.webhook-url'),
-                ['body' => $formData],
+                ['body' => json_encode($data)],
             );
 
             return redirect()->route('welcome');
-
         } catch (Exception $e) {
             return redirect()->route('welcome')
                 ->withErrors($e->getMessage());
@@ -51,7 +44,6 @@ class SlackController extends Controller
             return redirect()->route('welcome')
                 ->withErrors($e->getMessage());
         }
-
     }
 
     /**
