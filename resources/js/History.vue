@@ -46,17 +46,26 @@
 
 <script setup>
 import { ref } from 'vue';
-
-
 let post = ref('Loading...');
-let textMessage = ref('Message #api.');
+
+defineProps({
+    modelValue: String
+});
+
+let emitUpdate = defineEmits(['update:modelValue']);
 
 setTimeout(async () => {
     const res = await fetch(`/messages`).then((r) => r.json());
     // filter by user
-    // post.value = res.messages.filter(function (m) {
-    //     return m.user == 'U050N0EG6CT';
-    // });
+    post.value = res.messages.filter(function (m) {
+        //console.log(m);
+        if(m.hasOwnProperty('username')) {
+            return m.username === 'SCRUM_API';
+        }
+
+        return false;
+
+    });
 
     post.value = res.messages;
 
@@ -67,8 +76,7 @@ function convertUnixToDate(ts) {
 }
 
 function edit(message) {
-    console.log(message);
-    textMessage.value= message.text;
+    emitUpdate('update:modelValue', message.text);
 }
 </script>
 
